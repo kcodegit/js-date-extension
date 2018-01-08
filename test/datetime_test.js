@@ -135,6 +135,34 @@ describe('DateTime', function() {
     })
   }),
 
+  // isPast()
+  describe('isPast', function() {
+    var dt1 = new DateTime('December 13, 2000 00:13');
+    var dt2 = new DateTime('December 13, 2071 00:14');
+    it('should return true if its time val is a past.', function(){
+      expect(dt1.isPast()).to.be.true;
+      expect(dt2.isPast()).to.be.false;
+    }),
+    it('should throw TypeError with invalid arguments.', function(){
+      expect(() => { dt1.isPast(2000,12,13) } ).to.throw(TypeError);
+      expect(() => { dt1.isPast('December 13, 2000 00:14')} ).to.throw(TypeError);
+    })
+  }),
+
+  // isFuture()
+  describe('isFuture', function() {
+    var dt1 = new DateTime('December 13, 2000 00:13');
+    var dt2 = new DateTime('December 13, 2071 00:14');
+    it('should return true if its time val is a future.', function(){
+      expect(dt1.isFuture()).to.be.false;
+      expect(dt2.isFuture()).to.be.true;
+    }),
+    it('should throw TypeError with invalid arguments.', function(){
+      expect(() => { dt1.isFuture(2000,12,13) } ).to.throw(TypeError);
+      expect(() => { dt1.isFuture('December 13, 2000 00:14')} ).to.throw(TypeError);
+    })
+  }),
+
   // getDayString()
   describe('getDayString', function() {
     var dt = new DateTime('December 13, 2000 00:13');

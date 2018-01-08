@@ -30,6 +30,18 @@ class DateTime extends Date {
     if(!_isLANG(lang)) throw new TypeError('Invalid Arguments. Must be LANG.');
     this.lang = lang;
   }
+
+   /**
+   * returns true if it's the same time
+   * checks to the milliseconds
+   * @param { object } date 
+   * @returns { boolean }
+   * @throws { TypeError }
+   */
+  equals(date) {
+    if(arguments.length !== 1) throw new TypeError('Invalid Arguments.');
+    return !(date instanceof Date) ? false : this.getTime() === date.getTime();
+  }
   
   /**
    * returns true if it's before the date given in the argument
@@ -56,14 +68,25 @@ class DateTime extends Date {
   }
 
   /**
-   * returns true if it's the same time
-   * @param { object } date 
+   * returns true if it's a past time
+   * if it's a present time this returns false
    * @returns { boolean }
    * @throws { TypeError }
    */
-  equals(date) {
-    if(arguments.length !== 1) throw new TypeError('Invalid Arguments.');
-    return !(date instanceof Date) ? false : this.getTime() === date.getTime();
+  isPast() {
+    if(arguments.length !== 0) throw new TypeError('Invalid Arguments.');
+    return this.isBefore(new DateTime());
+  }
+  
+  /**
+   * returns true if it's a future time
+   * if it's a present time this returns false
+   * @returns { boolean }
+   * @throws { TypeError }
+   */
+  isFuture() {
+    if(arguments.length !== 0) throw new TypeError('Invalid Arguments.');
+    return this.isAfter(new DateTime());
   }
 
   /**
