@@ -1,26 +1,26 @@
 /**
- * Written by Kohei Ando 2018
+ * Written by Kohei 2018
  */
 
 'use strict';
 
-// imports
+var p = console.log;
 
 
 /**
  * Date class extension
  */
 class DateTime extends Date {
-  constructor(...str){
-    if(!(arguments.length)) super();
-    else super(str);
+  constructor(...args){
+    // minus 1 from the int val represents the month
+    if (arguments.length > 1) args[1] = args[1]-1;
+    super(...args);
     this.lang = LANG.en;
   }
 
   /*
     custom functions
   */
-
   /**
    * set lang
    * @param { int } lang (enum LANG)
