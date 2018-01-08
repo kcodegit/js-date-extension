@@ -24,23 +24,11 @@ class DateTime extends Date {
   /**
    * set lang
    * @param { int } lang (enum LANG)
-   * @throws { Error }
+   * @throws { TypeError }
    */
   setLang(lang){
-    if(!_isLANG(lang)) throw new Error('Invalid Arguments. Must be LANG.');
+    if(!_isLANG(lang)) throw new TypeError('Invalid Arguments. Must be LANG.');
     this.lang = lang;
-  }
-
-  /**
-   * returns time in a format given in the argument
-   * @param { string } format_str
-   * @returns { string }
-   * @throws { Error }
-   */
-  format(format_str) {
-    // write codes here
-  
-    return format_str;
   }
   
   /**
@@ -48,10 +36,10 @@ class DateTime extends Date {
    * if it's the same time this returns false
    * @param { Date } date 
    * @returns { boolean }
-   * @throws { Error }
+   * @throws { TypeError }
    */
   isBefore(date) {
-    if (!(date instanceof Date)) throw new Error('Invalid Arguments. Must be a Date instance.');
+    if (!(date instanceof Date)) throw new TypeError('Invalid Arguments. Must be a Date instance.');
     return this.getTime() - date.getTime() < 0;
   }
   
@@ -60,10 +48,10 @@ class DateTime extends Date {
    * if it's the same time this returns false
    * @param { Date } date 
    * @returns { boolean }
-   * @throws { Error }
+   * @throws { TypeError }
    */
   isAfter(date) {
-    if (!(date instanceof Date)) throw new Error('Invalid Arguments. Must be a Date instance.');
+    if (!(date instanceof Date)) throw new TypeError('Invalid Arguments. Must be a Date instance.');
     return this.getTime() - date.getTime() > 0;
   }
 
@@ -71,26 +59,61 @@ class DateTime extends Date {
    * returns true if it's the same time
    * @param { object } date 
    * @returns { boolean }
-   * @throws { Error }
+   * @throws { TypeError }
    */
   equals(date) {
-    if(arguments.length !== 1) throw new Error('Invalid Arguments.');
+    if(arguments.length !== 1) throw new TypeError('Invalid Arguments.');
     return !(date instanceof Date) ? false : this.getTime() === date.getTime();
+  }
+
+  /**
+   * get the day string of target language given in the argument
+   * if no target is specified, returns the default lang of the instance
+   * @param { object } target_lang (enum LANG) optional
+   * @returns { string }
+   * @throws { TypeError }
+   */
+  getDayString(target_lang = this.lang) {
+    if(!_isLANG(target_lang)) throw new TypeError('Invalid Arguments. Must be LANG.');
+    return target_lang.weekdays[super.getDay()];
+  }
+
+  /**
+   * get the month string of target language given in the argument
+   * if no target is specified, returns the default lang of the instance
+   * @param { object } target_lang (enum LANG) optional
+   * @returns { string }
+   * @throws { TypeError }
+   */
+  getMonthString(target_lang = this.lang) {
+    if(!_isLANG(target_lang)) throw new TypeError('Invalid Arguments. Must be LANG.');
+    return target_lang.months[super.getMonth()];
   }
 
   /*
     override
   */
   /**
-   * get the day string of target language given in the argument
-   * if no target is specified, returns the default lang of the instance
-   * @param { object } target_lang (enum LANG) optional
-   * @returns { string }
-   * @throws { Error }
+   * returns a number representing the month
+   *  1 ~ 12
+   * @returns { int }
    */
-  getDay(target_lang = this.lang) {
-    if(!_isLANG(target_lang)) throw new Error('Invalid Arguments. Must be LANG.');
-    return target_lang.weekdays[super.getDay()];
+  getMonth(){
+    return super.getMonth()+1;
+  }
+
+  /**
+   * returns time in a format given in the argument
+   * @param { string } format_str
+   * @returns { string }
+   * @throws { TypeError }
+   */
+  toDateString(format_str) {
+    // write codes here
+    if(!(arguments.length)) return super.toDateString();
+
+
+    return    
   }
 }
 
@@ -101,11 +124,13 @@ var _isLANG = l => Object.keys(LANG).some(k => LANG[k] === l);
 const LANG = Object.freeze({
   en : {
     toString: _ => 'English',
-    weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
   },
   jp : {
     toString: _ => '日本語',
-    weekdays: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日']
+    weekdays: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
+    months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
   }
 })
 
