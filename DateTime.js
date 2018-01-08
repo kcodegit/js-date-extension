@@ -118,11 +118,22 @@ class DateTime extends Date {
   */
   /**
    * returns a number representing the month
-   *  1 ~ 12
+   * 1 ~ 12
    * @returns { int }
    */
-  getMonth(){
+  getMonth() {
     return super.getMonth()+1;
+  }
+
+  /**
+   * takes a number representing the month and sets it
+   * 1 ~ 12
+   * @param { int } month_int
+   * @throws { TypeError }
+   */
+  setMonth(month_int) {
+    if(typeof month_int !== 'number') throw new TypeError('Invalid Arguments. Must be a number.')
+    return super.setMonth(month_int-1);
   }
 
   /**
@@ -134,9 +145,9 @@ class DateTime extends Date {
   toDateString(format_str) {
     // write codes here
     if(!(arguments.length)) return super.toDateString();
-
-
-    return    
+    if(new RegExp(/[^yMdD/"'`:;,\._\-=\[\]\{\}@\(\)\*\~\|\s#]/).test(format_str)) throw new TypeError('Invalid Argument. The format is not supported.');
+    // temporary
+    return super.toDateString();
   }
 }
 
