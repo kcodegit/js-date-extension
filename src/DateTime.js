@@ -15,6 +15,7 @@ class DateTime extends Date {
     // minus 1 from the int val represents the month
     if (arguments.length > 1) args[1] = args[1]-1;
     super(...args);
+    // default language setting
     this.lang = LANG.en;
   }
 
@@ -23,11 +24,11 @@ class DateTime extends Date {
   */
   /**
    * set lang
-   * @param { int } lang (enum LANG)
+   * @param { object } lang (enum LANG)
    * @throws { TypeError }
    */
   setLang(lang){
-    if(!_isLANG(lang)) throw new TypeError('Invalid Arguments. Must be LANG.');
+    if(!_isLANG(lang)) throw new TypeError('Invalid Arguments. Choose from DateTime.LANG.*');
     this.lang = lang;
   }
 
@@ -41,6 +42,14 @@ class DateTime extends Date {
   equals(date) {
     if(arguments.length !== 1) throw new TypeError('Invalid Arguments.');
     return !(date instanceof Date) ? false : this.getTime() === date.getTime();
+  }
+
+  /**
+   * checks if the date is valid
+   * @returns { boolean }
+   */
+  isValid(){
+    return this.toDateString() !== 'Invalid Date';
   }
   
   /**
@@ -89,6 +98,74 @@ class DateTime extends Date {
     return this.isAfter(new DateTime());
   }
 
+
+  /**
+   * if digits are given, it returns in the specified format
+   * default is one
+   * only takes 1 or 2
+   * @param { number } digits_minimum
+   * @returns { string }
+   * @throws { TypeError } 
+   */
+  getSecondsString(digits_minimum = 1){
+    var s = this.getSeconds;
+    if(digits_minimum === 2){
+      return (s < 10 ? '0' : '').concat(s.toString());
+    }
+    if(digits_minimum === 1 ) return s.toString();
+    throw new TypeError('Invalid Arguments. Only takes 1 or 2.');
+  }
+
+  /**
+   * if digits are given, it returns in the specified format
+   * default is one
+   * only takes 1 or 2
+   * @param { number } digits_minimum
+   * @returns { string }
+   * @throws { TypeError } 
+   */
+  getMinutesString(digits_minimum = 1){
+    var m = this.getMinutes;
+    if(digits_minimum === 2){
+      return (m < 10 ? '0' : '').concat(m.toString());
+    }
+    if(digits_minimum === 1 ) return m.toString();
+    throw new TypeError('Invalid Arguments. Only takes 1 or 2.');
+  }
+  /**
+   * if digits are given, it returns in the specified format
+   * default is one
+   * only takes 1 or 2
+   * @param { number } digits_minimum
+   * @returns { string }
+   * @throws { TypeError } 
+   */
+  getHoursString(digits_minimum = 1){
+    var h = this.getHours;
+    if(digits_minimum === 2){
+      return (h < 10 ? '0' : '').concat(h.toString());
+    }
+    if(digits_minimum === 1 ) return h.toString();
+    throw new TypeError('Invalid Arguments. Only takes 1 or 2.');
+  }
+
+  /**
+   * if digits are given, it returns in the specified format
+   * default is one
+   * only takes 1 or 2
+   * @param { number } digits_minimum
+   * @returns { string }
+   * @throws { TypeError } 
+   */
+  getDateString(digits_minimum = 1){
+    var d = this.getDate;
+    if(digits_minimum === 2){
+      return (d < 10 ? '0' : '').concat(d.toString());
+    }
+    if(digits_minimum === 1 ) return d.toString();
+    throw new TypeError('Invalid Arguments. Only takes 1 or 2.');
+  }
+
   /**
    * get the day string of target language given in the argument
    * if no target is specified, returns the default lang of the instance
@@ -117,18 +194,18 @@ class DateTime extends Date {
     override
   */
   /**
-   * returns a number representing the month
+   * returns an actual number representing the month
    * 1 ~ 12
-   * @returns { int }
+   * @returns { number }
    */
   getMonth() {
     return super.getMonth()+1;
   }
 
   /**
-   * takes a number representing the month and sets it
+   * takes an actual number representing the month and sets it
    * 1 ~ 12
-   * @param { int } month_int
+   * @param { number } month_int
    * @throws { TypeError }
    */
   setMonth(month_int) {
@@ -148,6 +225,26 @@ class DateTime extends Date {
     if(new RegExp(/[^yMdD/"'`:;,\._\-=\[\]\{\}@\(\)\*\~\|\s#]/).test(format_str)) throw new TypeError('Invalid Argument. The format is not supported.');
     // temporary
     return super.toDateString();
+  }
+
+  /**
+   * if any format is given, returns in it
+   * else just returns the original Date.toString()
+   * @param { string } format_str 
+   * @returns { string }
+   * @throws { TypeError }
+   */
+  toString(format_str){
+    if(!arguments.length) return super.toString();
+    if(new RegExp(/[^yMdD/"'`:;,\._\-=\[\]\{\}@\(\)\*\~\|\s#]/).test(format_str)) throw new TypeError('Invalid Argument. The format is not supported.');
+    return format_str.replace('yyyy', this.getFullYear())
+      .replace('yy', this.getYear())
+      .replace('MM', this.getMonthString(2))
+      .replace('dd', this.getDateString(2))
+      .replace('HH', this.getHoursString(2))
+      .replace('mm', this.getMinutesString(2))
+      .replace('ss', this.getSecondsString(2))
+      .replace('lll', this.getMilliseconds().toString())
   }
 }
 
