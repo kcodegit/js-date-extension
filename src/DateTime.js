@@ -1,11 +1,9 @@
 /**
  * Written by Kohei 2018
  */
-
 'use strict';
 
 var p = console.log;
-
 
 /**
  * Date class extension
@@ -108,7 +106,7 @@ class DateTime extends Date {
    * @throws { TypeError } 
    */
   getSecondsString(digits_minimum = 1){
-    var s = this.getSeconds;
+    var s = this.getSeconds();
     if(digits_minimum === 2){
       return (s < 10 ? '0' : '').concat(s.toString());
     }
@@ -125,7 +123,7 @@ class DateTime extends Date {
    * @throws { TypeError } 
    */
   getMinutesString(digits_minimum = 1){
-    var m = this.getMinutes;
+    var m = this.getMinutes();
     if(digits_minimum === 2){
       return (m < 10 ? '0' : '').concat(m.toString());
     }
@@ -141,7 +139,7 @@ class DateTime extends Date {
    * @throws { TypeError } 
    */
   getHoursString(digits_minimum = 1){
-    var h = this.getHours;
+    var h = this.getHours();
     if(digits_minimum === 2){
       return (h < 10 ? '0' : '').concat(h.toString());
     }
@@ -158,7 +156,7 @@ class DateTime extends Date {
    * @throws { TypeError } 
    */
   getDateString(digits_minimum = 1){
-    var d = this.getDate;
+    var d = this.getDate();
     if(digits_minimum === 2){
       return (d < 10 ? '0' : '').concat(d.toString());
     }
@@ -214,20 +212,6 @@ class DateTime extends Date {
   }
 
   /**
-   * returns time in a format given in the argument
-   * @param { string } format_str
-   * @returns { string }
-   * @throws { TypeError }
-   */
-  toDateString(format_str) {
-    // write codes here
-    if(!(arguments.length)) return super.toDateString();
-    if(new RegExp(/[^yMdD/"'`:;,\._\-=\[\]\{\}@\(\)\*\~\|\s#]/).test(format_str)) throw new TypeError('Invalid Argument. The format is not supported.');
-    // temporary
-    return super.toDateString();
-  }
-
-  /**
    * if any format is given, returns in it
    * else just returns the original Date.toString()
    * @param { string } format_str 
@@ -236,11 +220,11 @@ class DateTime extends Date {
    */
   toString(format_str){
     if(!arguments.length) return super.toString();
-    if(new RegExp(/[^yMdD/"'`:;,\._\-=\[\]\{\}@\(\)\*\~\|\s#]/).test(format_str)) throw new TypeError('Invalid Argument. The format is not supported.');
+    if(new RegExp(/[^yMdHmsl/"'`:;,.\-\s\[\]\{\}\(\)@\~\|#]/).test(format_str)) throw new TypeError('Invalid Argument. The format is not supported.');
     return format_str.replace('yyyy', this.getFullYear())
       .replace('yy', this.getYear())
-      .replace('MM', this.getMonthString(2))
-      .replace('dd', this.getDateString(2))
+      .replace('MM', this.getMonth())
+      .replace('dd', this.getDate())
       .replace('HH', this.getHoursString(2))
       .replace('mm', this.getMinutesString(2))
       .replace('ss', this.getSecondsString(2))
